@@ -1,7 +1,7 @@
 # Личный проект «TaskForce»
 
 * Студент: [Сергей Волков](https://up.htmlacademy.ru/yii/1/user/668021).
-* Наставник: `Неизвестно`.
+* Наставник: [Сергей Парфенов](https://htmlacademy.ru/profile/id926645).
 
 ---
 
