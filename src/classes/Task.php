@@ -2,7 +2,7 @@
 class Task {
 
     const STATUS_NEW = 'новое';
-    const STATUS_PERFORMING = 'выполняется';
+    const STATUS_PROCESSING = 'выполняется';
     const STATUS_CANCELED = 'отменено';
     const STATUS_FINISHED = 'завершено';
     const STATUS_FAILED = 'провалено';
@@ -23,51 +23,48 @@ class Task {
     private $status;
     private $deadline;
 
-    public function __construct()
+    public function __construct(int $customer_id)
     {
+        $this->status = self::STATUS_NEW;
+        $this->customer_id = $customer_id;
         // в конструкторе нужно определить заказчика, а также сменить статус  задачи на новая
     }
 
-    public function getNextStatus ($action)
+    public function getNextStatus (string $action)
     {
         switch ($action) {
             case self::ACTION_NEW:
-                $this->status = self::STATUS_NEW;
-                break;
+                return self::STATUS_NEW;
+
             case self::ACTION_FAIL:
-                $this->status = self::STATUS_FAILED;
+                return self::STATUS_FAILED;
                 break;
             case self::ACTION_CANCEL:
-                $this->status = self::STATUS_CANCELED;
+                return self::STATUS_CANCELED;
                 break;
             case self::ACTION_START:
-                $this->status = self::STATUS_PERFORMING;
+                return self::STATUS_PROCESSING;
                 break;
             case self::ACTION_FINISH:
-                $this->status = self::STATUS_FINISHED;
+                return self::STATUS_FINISHED;
                 break;
             default:
-                $this->status = null;
+                return null;
         }
 
-        return $this->status;
     }
 
-    public function get_status()
-    {
+    public function cancel (int $initiator_id) {
 
+        if ($initiator_id !== $this->customer_id) {
+            throw new Exception('Отменяющий задачу не является заказчиком');
+        }
+        if ($this->status !== self::STATUS_NEW) {
+            throw new Exception('Отменить задачу можно тогда, когда имеет статус новая');
+        }
     }
-
-    public function set_status()
-    {
-
-    }
-
 }
 
 
-$task = new Task();
 
-$nextStatus = $task->getNextStatus(Task::ACTION_FINISH);
-echo $nextStatus;
 
