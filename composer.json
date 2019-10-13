@@ -1,0 +1,13 @@
+{
+    "name": "sergwulf/668021-task-force-1",
+    "description": "TaskForce",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Serg Wulf",
+            "email": "serg.wulf@mail.ru"
+        }
+    ],
+    "require": {}
+}
