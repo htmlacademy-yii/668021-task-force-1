@@ -1,6 +1,6 @@
 <?php
 
-namespace htmlacademy\BusinessLogic;
+namespace App\Models;
 use Exception;
 
 class Task {
@@ -81,14 +81,22 @@ class Task {
         if ($initiator_id === $this->customer_id) {
             throw new Exception('Отказ от задачи доступен только исполнителю');
         }
-        $this->status = self::STATUS_FAILED;
+        if ($this->status === self::STATUS_PROCESSING) {
+            $this->status = self::STATUS_FAILED;
+        } else {
+            throw new Exception('Выполнить отказ от задачи можно только при условии, что задача в статусе выполнения');
+        }
     }
 
     public function finish (int $initiator_id) {
         if ($initiator_id !== $this->customer_id) {
             throw new Exception('Завершить и принять задачу может только сам заказчик');
         }
-        $this->status = self::STATUS_FINISHED;
+        if ($this->status === self::STATUS_PROCESSING) {
+            $this->status = self::STATUS_FINISHED;
+        } else {
+            throw new Exception('Завершить задачу можно, если она находится в статусе выполнения');
+        }
     }
 }
 

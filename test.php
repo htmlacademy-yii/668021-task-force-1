@@ -1,6 +1,6 @@
 <?php
 
-use htmlacademy\BusinessLogic\Task;
+use App\Models\Task;
 
 require_once 'vendor/autoload.php';
 
