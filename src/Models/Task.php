@@ -1,4 +1,8 @@
 <?php
+
+namespace App\Models;
+use Exception;
+
 class Task {
 
     const STATUS_NEW = 'новое';
@@ -61,6 +65,37 @@ class Task {
         }
         if ($this->status !== self::STATUS_NEW) {
             throw new Exception('Отменить задачу можно тогда, когда имеет статус новая');
+        }
+        $this->status = self::STATUS_CANCELED;
+    }
+
+    public function start (int $initiator_id) {
+
+        if ($initiator_id === $this->customer_id) {
+            throw new Exception('Взять на выполнение задачу может только исполнитель, а не заказчик');
+        }
+        $this->status = self::STATUS_PROCESSING;
+    }
+
+    public function fail (int $initiator_id) {
+        if ($initiator_id === $this->customer_id) {
+            throw new Exception('Отказ от задачи доступен только исполнителю');
+        }
+        if ($this->status === self::STATUS_PROCESSING) {
+            $this->status = self::STATUS_FAILED;
+        } else {
+            throw new Exception('Выполнить отказ от задачи можно только при условии, что задача в статусе выполнения');
+        }
+    }
+
+    public function finish (int $initiator_id) {
+        if ($initiator_id !== $this->customer_id) {
+            throw new Exception('Завершить и принять задачу может только сам заказчик');
+        }
+        if ($this->status === self::STATUS_PROCESSING) {
+            $this->status = self::STATUS_FINISHED;
+        } else {
+            throw new Exception('Завершить задачу можно, если она находится в статусе выполнения');
         }
     }
 }

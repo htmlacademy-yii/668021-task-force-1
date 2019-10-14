@@ -1,5 +1,8 @@
 <?php
-require_once __DIR__ . '/src/classes/Task.php';
+
+use App\Models\Task;
+
+require_once 'vendor/autoload.php';
 
 $customer_id = 5;
 
@@ -13,6 +16,27 @@ try {
     $task->cancel($initiator_id);
 } catch (Exception $exception) {
     echo $exception->getMessage();
+}
+
+try {
+    $initiator_id = 5;
+    $task->start($initiator_id);
+} catch (Exception $exception) {
+    echo $exception->getFile();
+}
+
+try {
+    $initiator_id = 5;
+    $task->fail($initiator_id);
+} catch (Exception $exception) {
+    echo $exception->getLine();
+}
+
+try {
+    $initiator_id = 6;
+    $task->finish($initiator_id);
+} catch (Exception $exception) {
+    echo $exception->getCode();
 }
 
 $nextStatus = $task->getNextStatus(Task::ACTION_NEW);
