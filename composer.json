@@ -9,5 +9,10 @@
             "email": "serg.wulf@mail.ru"
         }
     ],
-    "require": {}
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "htmlacademy\\": "src/"
+        }
+    }
 }

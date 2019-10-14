@@ -1,5 +1,8 @@
 <?php
-require_once __DIR__ . '/src/classes/Task.php';
+
+use htmlacademy\BusinessLogic\Task;
+
+require_once 'vendor/autoload.php';
 
 $customer_id = 5;
 

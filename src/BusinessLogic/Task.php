@@ -1,4 +1,8 @@
 <?php
+
+namespace htmlacademy\BusinessLogic;
+use Exception;
+
 class Task {
 
     const STATUS_NEW = 'новое';
