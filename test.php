@@ -15,6 +15,27 @@ try {
     echo $exception->getMessage();
 }
 
+try {
+    $initiator_id = 5;
+    $task->start($initiator_id);
+} catch (Exception $exception) {
+    echo $exception->getFile();
+}
+
+try {
+    $initiator_id = 5;
+    $task->fail($initiator_id);
+} catch (Exception $exception) {
+    echo $exception->getLine();
+}
+
+try {
+    $initiator_id = 6;
+    $task->finish($initiator_id);
+} catch (Exception $exception) {
+    echo $exception->getCode();
+}
+
 $nextStatus = $task->getNextStatus(Task::ACTION_NEW);
 assert($nextStatus === Task::STATUS_NEW, 'При создании задачи возвращается корректный статус');
 
