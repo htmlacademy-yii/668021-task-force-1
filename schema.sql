@@ -12,22 +12,15 @@ email VARCHAR(254),
 address VARCHAR(254),
 avatar VARCHAR(254),
 date_birthday DATETIME,
-about_info TEXT,
+info TEXT,
 password VARCHAR,
 contact_phone VARCHAR(64),
 contact_skype VARCHAR(64),
 contact_other VARCHAR(64),
 time_online DATETIME,
-failed_tasks INT(11),
 count_views INT(11)
 );
 
--- Таблица статуса пользователя (свободен, занят и др.)
-CREATE TABLE status_user (
-id INT(11) AUTO_INCREMENT PRIMARY KEY,
-status VARCHAR(64),
-FOREIGN KEY (user_id) REFERENCES users(id),
-)
 
 -- Таблица категорий задач
 CREATE TABLE categories (
@@ -60,7 +53,7 @@ FOREIGN KEY (user_id) REFERENCES users(id),
 -- Таблица задачи
 CREATE TABLE tasks (
 id INT(11) AUTO_INCREMENT PRIMARY KEY,
-target VARCHAR(254),
+name VARCHAR(254),
 description TEXT,
 files varchar(254),
 price INT(11),
@@ -89,14 +82,14 @@ CREATE TABLE messages(
 id INT(11) AUTO_INCREMENT PRIMARY KEY,
 message TEXT,
 FOREIGN KEY (sender_id) REFERENCES users(id),
-FOREIGN KEY (reciever_id) REFERENCES users(id)
+FOREIGN KEY (recipient_id) REFERENCES users(id)
 );
 
 -- Таблица отзывов
 CREATE TABLE reviews(
 id INT(11) AUTO_INCREMENT PRIMARY KEY,
 commentary TEXT,
-evaluation INT(3),
+evaluation TINYINT(1) UNSIGNED,
 FOREIGN KEY (task_id) REFERENCES tasks(id)
 );
 
@@ -109,7 +102,9 @@ FOREIGN KEY (user_id) REFERENCES users(id),
 FOREIGN KEY (task_id) REFERENCES tasks(id)
 );
 
-
+CREATE UNIQUE INDEX email_index ON users(email);
+CREATE INDEX name_task_index ON tasks(name);
+CREATE INDEX name_user_index ON users(name);
 /*
 Классы.
 По поводу классов взаимодействия, я набросал очень примерные список, возможно несколько классов нужно объедитиь в один,
@@ -138,10 +133,4 @@ FOREIGN KEY (task_id) REFERENCES tasks(id)
 8. Список всех откликов для одного задания.
 9. Список всех отзывов для одного пользователя.
 10. Список моих заданий: завершенные, новые, активные, отмененные, скрытые.
-
-
 */
-
-
-
-
