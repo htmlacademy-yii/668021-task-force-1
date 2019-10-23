@@ -6,59 +6,61 @@ USE taskforce;
 
 -- Таблица пользователи
 CREATE TABLE users (
-id INT(11) AUTO_INCREMENT PRIMARY KEY,
-name VARCHAR(64),
-email VARCHAR(254),
-address VARCHAR(254),
-avatar VARCHAR(254),
-date_birthday DATETIME,
+id INT AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(64) NOT NULL,
+email VARCHAR(254) NOT NULL,
+address VARCHAR(254) NOT NULL,
+avatar VARCHAR(254) NULL,
+birthday DATETIME,
 info TEXT,
-password VARCHAR,
+password VARCHAR(255),
 contact_phone VARCHAR(64),
 contact_skype VARCHAR(64),
-contact_other VARCHAR(64),
-time_online DATETIME,
-count_views INT(11)
+contact_other VARCHAR(255),
+creation_time DATETIME NOT NULL DEFAULT NOW(),
+last_visited_time DATETIME,
+count_views INT,
+show_contacts_costumers TINYINT
 );
 
 
 -- Таблица категорий задач
 CREATE TABLE categories (
-id INT(11) AUTO_INCREMENT PRIMARY KEY,
+id INT AUTO_INCREMENT PRIMARY KEY,
 name VARCHAR(254)
 );
 
 -- Таблица связи пользователя и категорий
 CREATE TABLE categories_users (
-id INT(11) AUTO_INCREMENT PRIMARY KEY,
+id INT AUTO_INCREMENT PRIMARY KEY,
 FOREIGN KEY (user_id) REFERENCES users(id),
 FOREIGN KEY (category_id) REFERENCES categories(id)
 )
 
 -- Таблица города
 CREATE TABLE cities (
-id INT(11) AUTO_INCREMENT PRIMARY KEY,
+id INT AUTO_INCREMENT PRIMARY KEY,
 name VARCHAR(254)
 );
 
 -- Таблица уведомлений (хранит информацию о типах уведомлений, которые нужно отсылать пользователю)
 CREATE TABLE notifications_users (
-id INT(11) AUTO_INCREMENT PRIMARY KEY,
-responses BOOLEAN,
-messages BOOLEAN,
-task_action BOOLEAN,
+id INT AUTO_INCREMENT PRIMARY KEY,
+responses TINYINT,
+messages TINYINT,
+task_action TINYINT,
 FOREIGN KEY (user_id) REFERENCES users(id),
 );
 
 -- Таблица задачи
 CREATE TABLE tasks (
-id INT(11) AUTO_INCREMENT PRIMARY KEY,
+id INT AUTO_INCREMENT PRIMARY KEY,
 name VARCHAR(254),
 description TEXT,
 files varchar(254),
-price INT(11),
+price INT,
 deadline DATETIME,
-publication_time DATETIME NOT NULL DEFAULT NOW(),
+creation_time DATETIME NOT NULL DEFAULT NOW(),
 FOREIGN KEY (initiator_id) REFERENCES users(id),
 FOREIGN KEY (costumer_id) REFERENCES users(id),
 FOREIGN KEY (location) REFERENCES cities(id),
@@ -67,19 +69,19 @@ FOREIGN KEY (status) REFERENCES status_task(id)
 
 -- Таблица статусов задачи
 CREATE TABLE status_task (
-id INT(11) AUTO_INCREMENT PRIMARY KEY,
+id INT AUTO_INCREMENT PRIMARY KEY,
 name VARCHAR(64);
 );
 
 -- Таблица действий над задачей
 CREATE TABLE action_task (
-id INT(11) AUTO_INCREMENT PRIMARY KEY,
+id INT AUTO_INCREMENT PRIMARY KEY,
 name VARCHAR(64);
 );
 
 -- Таблица личных сообщений
 CREATE TABLE messages(
-id INT(11) AUTO_INCREMENT PRIMARY KEY,
+id INT AUTO_INCREMENT PRIMARY KEY,
 message TEXT,
 FOREIGN KEY (sender_id) REFERENCES users(id),
 FOREIGN KEY (recipient_id) REFERENCES users(id)
@@ -87,17 +89,17 @@ FOREIGN KEY (recipient_id) REFERENCES users(id)
 
 -- Таблица отзывов
 CREATE TABLE reviews(
-id INT(11) AUTO_INCREMENT PRIMARY KEY,
+id INT AUTO_INCREMENT PRIMARY KEY,
 commentary TEXT,
-evaluation TINYINT(1) UNSIGNED,
+evaluation TINYINT UNSIGNED,
 FOREIGN KEY (task_id) REFERENCES tasks(id)
 );
 
 -- Таблица откликов
 CREATE TABLE responses_task (
-id INT(11) AUTO_INCREMENT PRIMARY KEY,
+id INT AUTO_INCREMENT PRIMARY KEY,
 commentary TEXT,
-initiator_price INT(11),
+initiator_price INT,
 FOREIGN KEY (user_id) REFERENCES users(id),
 FOREIGN KEY (task_id) REFERENCES tasks(id)
 );
