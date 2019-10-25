@@ -11,78 +11,91 @@ name VARCHAR(64) NOT NULL,
 email VARCHAR(254) NOT NULL,
 address VARCHAR(254) NOT NULL,
 avatar VARCHAR(254) NULL,
-birthday DATETIME,
-info TEXT,
-password VARCHAR(255),
-contact_phone VARCHAR(64),
-contact_skype VARCHAR(64),
-contact_other VARCHAR(255),
+birthday DATETIME NULL,
+info TEXT NULL,
+password VARCHAR(255) NOT NULL,
+contact_phone VARCHAR(64) NULL,
+contact_skype VARCHAR(64) NULL,
+contact_other VARCHAR(255) NULL,
 creation_time DATETIME NOT NULL DEFAULT NOW(),
-last_visited_time DATETIME,
-count_views INT,
-show_contacts_costumers TINYINT
+last_visited_time DATETIME NOT NULL,
+count_views INT NULL,
+show_contacts_costumers TINYINT NULL
 );
 
 
 -- Таблица категорий задач
 CREATE TABLE categories (
 id INT AUTO_INCREMENT PRIMARY KEY,
-name VARCHAR(254)
+name VARCHAR(254) NOT NULL
 );
 
 -- Таблица связи пользователя и категорий
 CREATE TABLE categories_users (
 id INT AUTO_INCREMENT PRIMARY KEY,
+user_id INT NOT NULL,
+category_id INT NULL,
 FOREIGN KEY (user_id) REFERENCES users(id),
 FOREIGN KEY (category_id) REFERENCES categories(id)
-)
+);
 
 -- Таблица города
 CREATE TABLE cities (
 id INT AUTO_INCREMENT PRIMARY KEY,
-name VARCHAR(254)
+name VARCHAR(254) NOT NULL
 );
 
 -- Таблица уведомлений (хранит информацию о типах уведомлений, которые нужно отсылать пользователю)
 CREATE TABLE notifications_users (
 id INT AUTO_INCREMENT PRIMARY KEY,
-responses TINYINT,
-messages TINYINT,
-task_action TINYINT,
-FOREIGN KEY (user_id) REFERENCES users(id),
-);
-
--- Таблица задачи
-CREATE TABLE tasks (
-id INT AUTO_INCREMENT PRIMARY KEY,
-name VARCHAR(254),
-description TEXT,
-files varchar(254),
-price INT,
-deadline DATETIME,
-creation_time DATETIME NOT NULL DEFAULT NOW(),
-FOREIGN KEY (initiator_id) REFERENCES users(id),
-FOREIGN KEY (costumer_id) REFERENCES users(id),
-FOREIGN KEY (location) REFERENCES cities(id),
-FOREIGN KEY (status) REFERENCES status_task(id)
+user_id INT NOT NULL,
+responses TINYINT NULL,
+messages TINYINT NULL,
+task_action TINYINT NULL,
+FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 -- Таблица статусов задачи
 CREATE TABLE status_task (
 id INT AUTO_INCREMENT PRIMARY KEY,
-name VARCHAR(64);
+name VARCHAR(64) NOT NULL
 );
+
+-- Таблица задачи
+CREATE TABLE tasks (
+id INT AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(254) NOT NULL,
+description TEXT NOT NULL,
+category_id ID NOT NULL,
+files varchar(254) NULL,
+price INT NULL,
+deadline DATETIME,
+creation_time DATETIME NOT NULL DEFAULT NOW(),
+initiator_id INT NOT NULL,
+costumer_id INT NOT NULL,
+location_id INT NOT NULL,
+status_id INT NOT NULL,
+FOREIGN KEY (initiator_id) REFERENCES users(id),
+FOREIGN KEY (costumer_id) REFERENCES users(id),
+FOREIGN KEY (category_id) REFERENCES categories(id),
+FOREIGN KEY (location_id) REFERENCES cities(id),
+FOREIGN KEY (status_id) REFERENCES status_task(id)
+);
+
+
 
 -- Таблица действий над задачей
 CREATE TABLE action_task (
 id INT AUTO_INCREMENT PRIMARY KEY,
-name VARCHAR(64);
+name VARCHAR(64)
 );
 
 -- Таблица личных сообщений
 CREATE TABLE messages(
 id INT AUTO_INCREMENT PRIMARY KEY,
 message TEXT,
+sender_id INT,
+recipient_id INT,
 FOREIGN KEY (sender_id) REFERENCES users(id),
 FOREIGN KEY (recipient_id) REFERENCES users(id)
 );
@@ -92,6 +105,7 @@ CREATE TABLE reviews(
 id INT AUTO_INCREMENT PRIMARY KEY,
 commentary TEXT,
 evaluation TINYINT UNSIGNED,
+task_id INT,
 FOREIGN KEY (task_id) REFERENCES tasks(id)
 );
 
@@ -100,6 +114,8 @@ CREATE TABLE responses_task (
 id INT AUTO_INCREMENT PRIMARY KEY,
 commentary TEXT,
 initiator_price INT,
+user_id INT,
+task_id INT,
 FOREIGN KEY (user_id) REFERENCES users(id),
 FOREIGN KEY (task_id) REFERENCES tasks(id)
 );
