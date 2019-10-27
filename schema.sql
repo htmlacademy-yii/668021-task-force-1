@@ -66,8 +66,8 @@ CREATE TABLE tasks (
 id INT AUTO_INCREMENT PRIMARY KEY,
 name VARCHAR(254) NOT NULL,
 description TEXT NOT NULL,
-category_id ID NOT NULL,
-files varchar(254) NULL,
+category_id INT NOT NULL,
+files VARCHAR(254) NULL,
 price INT NULL,
 deadline DATETIME,
 creation_time DATETIME NOT NULL DEFAULT NOW(),
@@ -87,15 +87,15 @@ FOREIGN KEY (status_id) REFERENCES status_task(id)
 -- Таблица действий над задачей
 CREATE TABLE action_task (
 id INT AUTO_INCREMENT PRIMARY KEY,
-name VARCHAR(64)
+name VARCHAR(64) NOT NULL
 );
 
 -- Таблица личных сообщений
 CREATE TABLE messages(
 id INT AUTO_INCREMENT PRIMARY KEY,
-message TEXT,
-sender_id INT,
-recipient_id INT,
+message TEXT NOT NULL,
+sender_id INT NOT NULL,
+recipient_id INT NOT NULL,
 FOREIGN KEY (sender_id) REFERENCES users(id),
 FOREIGN KEY (recipient_id) REFERENCES users(id)
 );
@@ -113,9 +113,9 @@ FOREIGN KEY (task_id) REFERENCES tasks(id)
 CREATE TABLE responses_task (
 id INT AUTO_INCREMENT PRIMARY KEY,
 commentary TEXT,
-initiator_price INT,
-user_id INT,
-task_id INT,
+initiator_price INT NULL,
+user_id INT NOT NULL,
+task_id INT NOT NULL,
 FOREIGN KEY (user_id) REFERENCES users(id),
 FOREIGN KEY (task_id) REFERENCES tasks(id)
 );
