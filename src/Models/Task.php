@@ -1,6 +1,11 @@
 <?php
 
 namespace App\Models;
+use App\Models\Actions\ActionCancel;
+use App\Models\Actions\ActionFail;
+use App\Models\Actions\ActionFinish;
+use App\Models\Actions\ActionNew;
+use App\Models\Actions\ActionStart;
 use Exception;
 
 class Task {
@@ -37,19 +42,19 @@ class Task {
     public function getNextStatus (string $action)
     {
         switch ($action) {
-            case self::ACTION_NEW:
+            case ActionNew::class:
                 return self::STATUS_NEW;
-
-            case self::ACTION_FAIL:
+                break;
+            case ActionFail::class:
                 return self::STATUS_FAILED;
                 break;
-            case self::ACTION_CANCEL:
+            case ActionCancel::class:
                 return self::STATUS_CANCELED;
                 break;
-            case self::ACTION_START:
+            case ActionStart::class:
                 return self::STATUS_PROCESSING;
                 break;
-            case self::ACTION_FINISH:
+            case ActionFinish::class:
                 return self::STATUS_FINISHED;
                 break;
             default:
@@ -97,6 +102,10 @@ class Task {
         } else {
             throw new Exception('Завершить задачу можно, если она находится в статусе выполнения');
         }
+    }
+
+    public function AccessActions (int $initiator_id) {
+
     }
 }
 
