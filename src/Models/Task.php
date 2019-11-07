@@ -31,6 +31,19 @@ class Task {
     private $customer_id;
     private $status;
     private $deadline;
+    private $listAccessActions=[];
+
+    public function getStatus() {
+        return $this->status;
+    }
+
+    public function getCustomer() {
+        return $this->customer_id;
+    }
+
+    public function getExecutor() {
+        return $this->executor_id;
+    }
 
     public function __construct(int $customer_id)
     {
@@ -104,8 +117,18 @@ class Task {
         }
     }
 
-    public function AccessActions (int $initiator_id) {
+    public function AccessActions (string $status, int $initiator_id) {
 
+        $this->status = $status;
+
+        $this->listAccessActions = [
+            ActionNew::class => ActionNew::checkRules($this, $initiator_id),
+            ActionCancel::class => ActionCancel::checkRules($this, $initiator_id),
+            ActionStart::class => ActionStart::checkRules($this, $initiator_id),
+            ActionFail::class => ActionFail::checkRules($this, $initiator_id),
+            ActionFinish::class => ActionFinish::checkRules($this, $initiator_id)
+        ];
+        return $this->listAccessActions;
     }
 }
 

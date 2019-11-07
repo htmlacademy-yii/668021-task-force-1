@@ -57,3 +57,25 @@ $nextStatus = $task->getNextStatus(Actions\ActionFinish::class);
 assert($nextStatus === Task::STATUS_FINISHED, 'При завершении задачи возвращается корректный статус');
 
 
+// Проверка метода AccessActions
+
+$listActions = $task->AccessActions(Task::STATUS_NEW, 8);
+echo '<br>';
+var_dump($listActions);
+
+$listActions = $task->AccessActions(Task::STATUS_NEW, 5);
+echo '<br>';
+var_dump($listActions);
+
+$listActions = $task->AccessActions(Task::STATUS_PROCESSING, 5);
+echo '<br>';
+var_dump($listActions);
+
+$listActions = $task->AccessActions(Task::STATUS_FAILED, 8);
+echo '<br>';
+
+var_dump($listActions);
+$listActions = $task->AccessActions(Task::STATUS_FINISHED, 5);
+
+
+
