@@ -55,21 +55,16 @@ class Task {
     public function getNextStatus (string $action)
     {
         switch ($action) {
-            case ActionNew::class:
+            case ActionNew::getName():
                 return self::STATUS_NEW;
-                break;
-            case ActionFail::class:
+            case ActionFail::getName():
                 return self::STATUS_FAILED;
-                break;
-            case ActionCancel::class:
+            case ActionCancel::getName():
                 return self::STATUS_CANCELED;
-                break;
-            case ActionStart::class:
+            case ActionStart::getName():
                 return self::STATUS_PROCESSING;
-                break;
-            case ActionFinish::class:
+            case ActionFinish::getName():
                 return self::STATUS_FINISHED;
-                break;
             default:
                 return null;
         }
@@ -117,16 +112,16 @@ class Task {
         }
     }
 
-    public function AccessActions (string $status, int $initiator_id) {
+    public function accessActions (string $status, int $initiator_id) {
 
         $this->status = $status;
 
         $this->listAccessActions = [
-            ActionNew::class => ActionNew::checkRules($this, $initiator_id),
-            ActionCancel::class => ActionCancel::checkRules($this, $initiator_id),
-            ActionStart::class => ActionStart::checkRules($this, $initiator_id),
-            ActionFail::class => ActionFail::checkRules($this, $initiator_id),
-            ActionFinish::class => ActionFinish::checkRules($this, $initiator_id)
+            ActionNew::getName() => ActionNew::checkRules($this, $initiator_id),
+            ActionCancel::getName() => ActionCancel::checkRules($this, $initiator_id),
+            ActionStart::getName() => ActionStart::checkRules($this, $initiator_id),
+            ActionFail::getName() => ActionFail::checkRules($this, $initiator_id),
+            ActionFinish::getName() => ActionFinish::checkRules($this, $initiator_id)
         ];
         return $this->listAccessActions;
     }

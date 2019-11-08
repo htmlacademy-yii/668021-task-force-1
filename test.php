@@ -41,41 +41,41 @@ try {
     echo $exception->getCode();
 }
 
-$nextStatus = $task->getNextStatus(Actions\ActionNew::class);
+$nextStatus = $task->getNextStatus(Actions\ActionNew::getName());
 assert($nextStatus === Task::STATUS_NEW, 'При создании задачи возвращается корректный статус');
 
-$nextStatus = $task->getNextStatus(Actions\ActionFail::class);
+$nextStatus = $task->getNextStatus(Actions\ActionFail::getName());
 assert($nextStatus === Task::STATUS_FAILED, 'При отказе от задачи возвращается корректный статус');
 
-$nextStatus = $task->getNextStatus(Actions\ActionCancel::class);
+$nextStatus = $task->getNextStatus(Actions\ActionCancel::getName());
 assert($nextStatus === Task::STATUS_CANCELED, 'При отмене задачи возвращается корректный статус');
 
-$nextStatus = $task->getNextStatus(Actions\ActionStart::class);
+$nextStatus = $task->getNextStatus(Actions\ActionStart::getName());
 assert($nextStatus === Task::STATUS_PROCESSING, 'При старте задачи возвращается корректный статус');
 
-$nextStatus = $task->getNextStatus(Actions\ActionFinish::class);
+$nextStatus = $task->getNextStatus(Actions\ActionFinish::getName());
 assert($nextStatus === Task::STATUS_FINISHED, 'При завершении задачи возвращается корректный статус');
 
 
-// Проверка метода AccessActions
+// Проверка метода accessActions
 
-$listActions = $task->AccessActions(Task::STATUS_NEW, 8);
+$listActions = $task->accessActions(Task::STATUS_NEW, 8);
 echo '<br>';
 var_dump($listActions);
 
-$listActions = $task->AccessActions(Task::STATUS_NEW, 5);
+$listActions = $task->accessActions(Task::STATUS_NEW, 5);
 echo '<br>';
 var_dump($listActions);
 
-$listActions = $task->AccessActions(Task::STATUS_PROCESSING, 5);
+$listActions = $task->accessActions(Task::STATUS_PROCESSING, 5);
 echo '<br>';
 var_dump($listActions);
 
-$listActions = $task->AccessActions(Task::STATUS_FAILED, 8);
+$listActions = $task->accessActions(Task::STATUS_FAILED, 8);
 echo '<br>';
 
 var_dump($listActions);
-$listActions = $task->AccessActions(Task::STATUS_FINISHED, 5);
+$listActions = $task->accessActions(Task::STATUS_FINISHED, 5);
 
 
 
