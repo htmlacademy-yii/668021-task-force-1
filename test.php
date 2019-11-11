@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Actions;
 use App\Models\Task;
+
 
 require_once 'vendor/autoload.php';
 
@@ -39,19 +41,41 @@ try {
     echo $exception->getCode();
 }
 
-$nextStatus = $task->getNextStatus(Task::ACTION_NEW);
+$nextStatus = $task->getNextStatus(Actions\ActionNew::getName());
 assert($nextStatus === Task::STATUS_NEW, 'При создании задачи возвращается корректный статус');
 
-$nextStatus = $task->getNextStatus(Task::ACTION_FAIL);
+$nextStatus = $task->getNextStatus(Actions\ActionFail::getName());
 assert($nextStatus === Task::STATUS_FAILED, 'При отказе от задачи возвращается корректный статус');
 
-$nextStatus = $task->getNextStatus(Task::ACTION_CANCEL);
+$nextStatus = $task->getNextStatus(Actions\ActionCancel::getName());
 assert($nextStatus === Task::STATUS_CANCELED, 'При отмене задачи возвращается корректный статус');
 
-$nextStatus = $task->getNextStatus(Task::ACTION_START);
+$nextStatus = $task->getNextStatus(Actions\ActionStart::getName());
 assert($nextStatus === Task::STATUS_PROCESSING, 'При старте задачи возвращается корректный статус');
 
-$nextStatus = $task->getNextStatus(Task::ACTION_FINISH);
+$nextStatus = $task->getNextStatus(Actions\ActionFinish::getName());
 assert($nextStatus === Task::STATUS_FINISHED, 'При завершении задачи возвращается корректный статус');
+
+
+// Проверка метода accessActions
+
+$listActions = $task->accessActions(Task::STATUS_NEW, 8);
+echo '<br>';
+var_dump($listActions);
+
+$listActions = $task->accessActions(Task::STATUS_NEW, 5);
+echo '<br>';
+var_dump($listActions);
+
+$listActions = $task->accessActions(Task::STATUS_PROCESSING, 5);
+echo '<br>';
+var_dump($listActions);
+
+$listActions = $task->accessActions(Task::STATUS_FAILED, 8);
+echo '<br>';
+
+var_dump($listActions);
+$listActions = $task->accessActions(Task::STATUS_FINISHED, 5);
+
 
 

@@ -1,6 +1,11 @@
 <?php
 
 namespace App\Models;
+use App\Models\Actions\ActionCancel;
+use App\Models\Actions\ActionFail;
+use App\Models\Actions\ActionFinish;
+use App\Models\Actions\ActionNew;
+use App\Models\Actions\ActionStart;
 use Exception;
 
 class Task {
@@ -26,6 +31,19 @@ class Task {
     private $customer_id;
     private $status;
     private $deadline;
+    private $listAccessActions=[];
+
+    public function getStatus() {
+        return $this->status;
+    }
+
+    public function getCustomer() {
+        return $this->customer_id;
+    }
+
+    public function getExecutor() {
+        return $this->executor_id;
+    }
 
     public function __construct(int $customer_id)
     {
@@ -37,21 +55,16 @@ class Task {
     public function getNextStatus (string $action)
     {
         switch ($action) {
-            case self::ACTION_NEW:
+            case ActionNew::getName():
                 return self::STATUS_NEW;
-
-            case self::ACTION_FAIL:
+            case ActionFail::getName():
                 return self::STATUS_FAILED;
-                break;
-            case self::ACTION_CANCEL:
+            case ActionCancel::getName():
                 return self::STATUS_CANCELED;
-                break;
-            case self::ACTION_START:
+            case ActionStart::getName():
                 return self::STATUS_PROCESSING;
-                break;
-            case self::ACTION_FINISH:
+            case ActionFinish::getName():
                 return self::STATUS_FINISHED;
-                break;
             default:
                 return null;
         }
@@ -97,6 +110,20 @@ class Task {
         } else {
             throw new Exception('Завершить задачу можно, если она находится в статусе выполнения');
         }
+    }
+
+    public function accessActions (string $status, int $initiator_id) {
+
+        $this->status = $status;
+
+        $this->listAccessActions = [
+            ActionNew::getName() => ActionNew::checkRules($this, $initiator_id),
+            ActionCancel::getName() => ActionCancel::checkRules($this, $initiator_id),
+            ActionStart::getName() => ActionStart::checkRules($this, $initiator_id),
+            ActionFail::getName() => ActionFail::checkRules($this, $initiator_id),
+            ActionFinish::getName() => ActionFinish::checkRules($this, $initiator_id)
+        ];
+        return $this->listAccessActions;
     }
 }
 
