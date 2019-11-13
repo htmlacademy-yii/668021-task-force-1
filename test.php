@@ -2,6 +2,7 @@
 
 use App\Models\Actions;
 use App\Models\Task;
+use App\Exception\StatusException;
 
 
 require_once 'vendor/autoload.php';
@@ -60,22 +61,17 @@ assert($nextStatus === Task::STATUS_FINISHED, 'При завершении за�
 // Проверка метода accessActions
 
 $listActions = $task->accessActions(Task::STATUS_NEW, 8);
-echo '<br>';
-var_dump($listActions);
-
 $listActions = $task->accessActions(Task::STATUS_NEW, 5);
-echo '<br>';
-var_dump($listActions);
-
 $listActions = $task->accessActions(Task::STATUS_PROCESSING, 5);
-echo '<br>';
-var_dump($listActions);
-
 $listActions = $task->accessActions(Task::STATUS_FAILED, 8);
-echo '<br>';
-
-var_dump($listActions);
 $listActions = $task->accessActions(Task::STATUS_FINISHED, 5);
 
+
+// Проверка подачи несуществующего статуса
+try {
+    $listActions = $task->accessActions('STATUS_FIRE', 5);
+} catch (StatusException $ex) {
+    echo $ex->getMessage();
+}
 
 

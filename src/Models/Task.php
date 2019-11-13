@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use App\Exception\StatusException;
 use App\Models\Actions\ActionCancel;
 use App\Models\Actions\ActionFail;
 use App\Models\Actions\ActionFinish;
@@ -33,15 +34,18 @@ class Task {
     private $deadline;
     private $listAccessActions=[];
 
-    public function getStatus() {
+    public function getStatus(): ?string
+    {
         return $this->status;
     }
 
-    public function getCustomer() {
+    public function getCustomer(): ?int
+    {
         return $this->customer_id;
     }
 
-    public function getExecutor() {
+    public function getExecutor(): ?int
+    {
         return $this->executor_id;
     }
 
@@ -52,7 +56,7 @@ class Task {
         // в конструкторе нужно определить заказчика, а также сменить статус  задачи на новая
     }
 
-    public function getNextStatus (string $action)
+    public function getNextStatus (string $action): ?string
     {
         switch ($action) {
             case ActionNew::getName():
@@ -71,7 +75,8 @@ class Task {
 
     }
 
-    public function cancel (int $initiator_id) {
+    public function cancel(int $initiator_id): void
+    {
 
         if ($initiator_id !== $this->customer_id) {
             throw new Exception('Отменяющий задачу не является заказчиком');
@@ -82,7 +87,8 @@ class Task {
         $this->status = self::STATUS_CANCELED;
     }
 
-    public function start (int $initiator_id) {
+    public function start(int $initiator_id): void
+    {
 
         if ($initiator_id === $this->customer_id) {
             throw new Exception('Взять на выполнение задачу может только исполнитель, а не заказчик');
@@ -90,7 +96,8 @@ class Task {
         $this->status = self::STATUS_PROCESSING;
     }
 
-    public function fail (int $initiator_id) {
+    public function fail(int $initiator_id): void
+    {
         if ($initiator_id === $this->customer_id) {
             throw new Exception('Отказ от задачи доступен только исполнителю');
         }
@@ -101,7 +108,8 @@ class Task {
         }
     }
 
-    public function finish (int $initiator_id) {
+    public function finish(int $initiator_id): void
+    {
         if ($initiator_id !== $this->customer_id) {
             throw new Exception('Завершить и принять задачу может только сам заказчик');
         }
@@ -112,7 +120,13 @@ class Task {
         }
     }
 
-    public function accessActions (string $status, int $initiator_id) {
+    public function accessActions(string $status, int $initiator_id): array
+    {
+        // Проверка переменной статуса на существование(статус может быть только из списка констант, любое другое значение
+        // вызывает исключение
+        if (!$this->checkStatus($status)) {
+            throw new StatusException();
+        }
 
         $this->status = $status;
 
@@ -124,6 +138,18 @@ class Task {
             ActionFinish::getName() => ActionFinish::checkRules($this, $initiator_id)
         ];
         return $this->listAccessActions;
+    }
+
+    private function checkStatus(string $status): bool
+    {
+        $reflectionClass = new \ReflectionClass($this);
+        $listConstants = $reflectionClass->getConstants();
+        foreach ($listConstants as $constant) {
+            if ($status === $constant) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 
