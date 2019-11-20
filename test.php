@@ -75,3 +75,9 @@ try {
 }
 
 
+$file = new SplFileObject("data\categories.csv");
+while (!$file->eof()) {
+    var_dump($file->fgetcsv());
+}
+
+
