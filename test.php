@@ -3,9 +3,13 @@
 use App\Models\Actions;
 use App\Models\Task;
 use App\Exception\StatusException;
+use App\Conversion;
 
 
 require_once 'vendor/autoload.php';
+
+// получить корень сайта
+$root = $_SERVER['DOCUMENT_ROOT'];
 
 $customer_id = 5;
 
@@ -75,9 +79,7 @@ try {
 }
 
 
-$file = new SplFileObject("data\categories.csv");
-while (!$file->eof()) {
-    var_dump($file->fgetcsv());
-}
+$file = new Conversion\ConversionCVS("data/categories.csv");
+$file->parsing_cvs();
 
 
