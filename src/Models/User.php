@@ -7,6 +7,7 @@ namespace App\Models;
  * */
 
 class User {
+
     public $id;
     public $name;
     public $email;
@@ -22,6 +23,8 @@ class User {
     public $last_visited_time;
     public $count_views;
     public $show_contacts_costumers;
+
+    const NAME_TABLE = 'users';
 
     public function save() {
         // Сохранение значений свойств в БД.

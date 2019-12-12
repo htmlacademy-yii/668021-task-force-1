@@ -27,7 +27,8 @@ show_contacts_costumers TINYINT NULL
 -- Таблица категорий задач
 CREATE TABLE categories (
 id INT AUTO_INCREMENT PRIMARY KEY,
-name VARCHAR(254) NOT NULL
+name VARCHAR(254) NOT NULL,
+icon VARCHAR(254) NOT NULL
 );
 
 -- Таблица связи пользователя и категорий
@@ -42,7 +43,9 @@ FOREIGN KEY (category_id) REFERENCES categories(id)
 -- Таблица города
 CREATE TABLE cities (
 id INT AUTO_INCREMENT PRIMARY KEY,
-name VARCHAR(254) NOT NULL
+name VARCHAR(254) NOT NULL,
+lat FLOAT NOT NULL,
+long FLOAT NOT NULL
 );
 
 -- Таблица уведомлений (хранит информацию о типах уведомлений, которые нужно отсылать пользователю)
@@ -72,11 +75,11 @@ price INT NULL,
 deadline DATETIME,
 creation_time DATETIME NOT NULL DEFAULT NOW(),
 initiator_id INT NOT NULL,
-costumer_id INT NOT NULL,
+customer_id INT NOT NULL,
 location_id INT NOT NULL,
 status_id INT NOT NULL,
 FOREIGN KEY (initiator_id) REFERENCES users(id),
-FOREIGN KEY (costumer_id) REFERENCES users(id),
+FOREIGN KEY (customer_id) REFERENCES users(id),
 FOREIGN KEY (category_id) REFERENCES categories(id),
 FOREIGN KEY (location_id) REFERENCES cities(id),
 FOREIGN KEY (status_id) REFERENCES status_task(id)
@@ -103,6 +106,7 @@ FOREIGN KEY (recipient_id) REFERENCES users(id)
 -- Таблица отзывов
 CREATE TABLE reviews(
 id INT AUTO_INCREMENT PRIMARY KEY,
+creation_time DATETIME NOT NULL DEFAULT NOW(),
 commentary TEXT,
 evaluation TINYINT UNSIGNED,
 task_id INT,

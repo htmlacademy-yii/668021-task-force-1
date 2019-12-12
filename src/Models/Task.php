@@ -11,6 +11,21 @@ use Exception;
 
 class Task {
 
+    public $id;
+    public $name;
+    public $description;
+    public $category_id;
+    public $files;
+    public $price;
+    public $deadline;
+    public $creation_time;
+    public $initiator_id;
+    public $customer_id;
+    public $location_id;
+    public $status_id;
+
+    const NAME_TABLE = 'tasks';
+
     const STATUS_NEW = 'новое';
     const STATUS_PROCESSING = 'выполняется';
     const STATUS_CANCELED = 'отменено';
@@ -29,9 +44,7 @@ class Task {
 
 
     private $executor_id;
-    private $customer_id;
     private $status;
-    private $deadline;
     private $listAccessActions=[];
 
     public function getStatus(): ?string
