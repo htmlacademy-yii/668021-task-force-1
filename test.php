@@ -79,7 +79,8 @@ try {
 }
 
 
-$file = new Conversion\ConversionCVS("data/categories.csv");
+$file = new Conversion\ConversionCSV("data/categories.csv");
 $file->parsing_cvs();
 
-
+$user_bd = new \App\Models\User();
+var_dump(get_object_vars($user_bd));

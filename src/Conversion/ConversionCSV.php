@@ -2,7 +2,7 @@
 namespace App\Conversion;
 
 
-class ConversionCVS
+class ConversionCSV
 {
 
     private $heads;
@@ -13,9 +13,9 @@ class ConversionCVS
     private $file_sql;
 
 
-    public function __construct(string $file)
+    public function __construct(string $csvFile)
     {
-        $this->file_csv = new \SplFileObject($file);
+        $this->file_csv = new \SplFileObject($csvFile);
         $this->file_sql = new \SplFileObject('categories.sql','w');
     }
     // 1. Открыть нужный файл CVS
@@ -43,7 +43,7 @@ class ConversionCVS
         return $sql_string;
     }
 
-    //$file->fgetcsv()
+    //$csvFile->fgetcsv()
     // Начиная со второй строки извлекаем значения name и icon, сохраняем их в соответствующие переменные.
     // Создаем новую строку вид private sql_into = "INSERT INTO categories SET $name=$name_value, $icon=$icon_value";
     // Записываем эту строку в новый файл с таким же названием, но другим расширением *.sql
